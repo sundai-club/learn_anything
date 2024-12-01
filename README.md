@@ -7,6 +7,7 @@ This codebase is designed to help a user learn about a topic by first learning t
 ### Prerequisites
 - Python 3.10 or higher
 - pip (Python package installer)
+- OpenAI api key
 
 ### Installation
 
@@ -16,7 +17,12 @@ git clone https://github.com/yourusername/learn_anything.git
 cd learn_anything
 ```
 
-2. Create and activate a virtual environment:
+2. Save OpenAI api key to an env file
+```bash
+echo "OPENAI_API_KEY={key_here}" > .env
+```
+
+3. Create and activate a virtual environment:
 ```bash
 # Create virtual environment
 python3 -m venv venv
@@ -31,12 +37,12 @@ source venv/bin/activate
 (venv) deactivate
 ```
 
-3. Install required packages:
+4. Install required packages:
 ```bash
 (venv) pip install -r requirements.txt
 ```
 
-4. Run the python scripts (example: graph creation script):
+5. Run the python scripts (example: graph creation script):
 ```bash
 (venv) ./backend/src/graph_creation.py [--optional-arguments]
 ```

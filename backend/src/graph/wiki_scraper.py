@@ -1,7 +1,16 @@
+#!/usr/bin/env python3
+
 import requests
 from bs4 import BeautifulSoup
 import json
 import re
+import os
+
+
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../"))
+data_dir = os.path.join(ROOT, "backend/data")
+results_dir = os.path.join(ROOT, "backend/results")
+
 
 # Extract all links from the page
 def extract_links(soup):
@@ -68,7 +77,7 @@ if __name__ == "__main__":
     cleaned_data = scrape_and_clean_wikipedia(url)
     if cleaned_data:
         # Save the cleaned output to a JSON file
-        output_file_path = "scraped_data.json"
+        output_file_path = os.path.join(results_dir, "scraped_data.json")
         with open(output_file_path, "w", encoding="utf-8") as f:
             json.dump(cleaned_data, f, indent=4, ensure_ascii=False)
         print(f"Cleaned data saved in '{output_file_path}'!")

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
@@ -16,9 +18,17 @@ class ResponseOutput(BaseModel):
     id: str
     name: str
     topics: list[LinkItem]
+ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../"))
+data_dir = os.path.join(ROOT, "backend/data")
+results_dir = os.path.join(ROOT, "backend/results")
+
 
 def get_data(json_file):
-    with open("cleaned_output.json", "r") as f:
+    if not os.path.exists(json_file):
+        raise ValueError(f"File {json_file} does not exist")
+        return -1
+
+    with open(json_file, "r") as f:
         data = json.load(f)
         url = data.get("url")
         scraped_data = data.get("scraped_data")
@@ -75,4 +85,5 @@ def main():
         print(f"{item.name}: {item.id}")
     
 main()
+
 
