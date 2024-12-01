@@ -1,0 +1,111 @@
+```
+  const treeData = {
+    name: "AI Research",
+    value: "AI",
+    desc: "Exploring artificial intelligence through advanced research and practical applications.",
+    children: [
+      {
+        name: "Machine Learning",
+        value: "ML",
+        desc: "Algorithms and statistical models that enable computers to learn from data.",
+        children: [
+          {
+            name: "Deep Learning",
+            value: "DL",
+            desc: "Neural networks with multiple layers for complex pattern recognition.",
+            children: [
+              {
+                name: "Neural Networks",
+                value: "NN",
+                desc: "Computing systems inspired by biological neural networks in human brains.",
+              },
+              {
+                name: "Computer Vision",
+                value: "CV",
+                desc: "Enabling computers to understand and process visual information from images.",
+              },
+              {
+                name: "NLP",
+                value: "NLP",
+                desc: "Processing and analyzing natural human language for various applications.",
+              },
+            ],
+          },
+          {
+            name: "Reinforcement Learning",
+            value: "RL",
+            desc: "Training agents through reward-based feedback in interactive environments.",
+            children: [
+              {
+                name: "Q-Learning",
+                value: "QL",
+                desc: "Value-based learning algorithm for optimal action selection in environments.",
+              },
+              {
+                name: "Policy Gradients",
+                value: "PG",
+                desc: "Direct optimization of policy functions for decision-making in AI.",
+              },
+              {
+                name: "Multi-Agent",
+                value: "MA",
+                desc: "Systems where multiple AI agents interact and learn together.",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        name: "Research Areas",
+        value: "RA",
+        desc: "Key focus areas in artificial intelligence research and development.",
+        children: [
+          {
+            name: "Robotics",
+            value: "RB",
+            desc: "Integration of AI with physical systems for real-world interaction.",
+            children: [
+              {
+                name: "Perception",
+                value: "PR",
+                desc: "Enabling robots to understand their environment through sensors.",
+              },
+              {
+                name: "Control",
+                value: "CT",
+                desc: "Systems for precise robot movement and interaction control.",
+              },
+              {
+                name: "Planning",
+                value: "PL",
+                desc: "Algorithms for determining optimal sequences of robot actions.",
+              },
+            ],
+          },
+          {
+            name: "AI Ethics",
+            value: "AE",
+            desc: "Ensuring responsible and beneficial AI development and deployment.",
+            children: [
+              {
+                name: "Fairness",
+                value: "FR",
+                desc: "Preventing bias and ensuring equitable AI system behavior.",
+              },
+              {
+                name: "Transparency",
+                value: "TR",
+                desc: "Making AI decisions interpretable and understandable to humans.",
+              },
+              {
+                name: "Safety",
+                value: "SF",
+                desc: "Ensuring AI systems operate reliably and safely in all conditions.",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+```
