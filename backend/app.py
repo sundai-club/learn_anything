@@ -1,9 +1,19 @@
 from fastapi import FastAPI
-from backend.src.graph_creation import create_graph
-from backend.src.bq_utils import save_graph_to_bq, get_graph_from_bq, save_wiki_info_to_bq, get_wiki_info_from_bq
+from fastapi.middleware.cors import CORSMiddleware
+from src.graph_creation import create_graph
+from src.bq_utils import save_graph_to_bq, get_graph_from_bq, save_wiki_info_to_bq, get_wiki_info_from_bq
 
 app = FastAPI()
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 async def root():
@@ -40,3 +50,8 @@ def save_wiki_info(request: dict):
 def get_wiki_info(request: dict):
     url = request["url"]
     return {"wiki_info": get_wiki_info(url)}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
