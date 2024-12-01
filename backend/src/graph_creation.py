@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 
 import sys
-
-if sys.version_info < (3, 10):
-    sys.exit("Python 3.10 or higher is required to run this script")
-
 import os
 import networkx as nx
 import graphlib
@@ -12,6 +8,10 @@ import matplotlib.pyplot as plt
 
 import json
 import argparse
+
+
+if sys.version_info < (3, 10):
+    sys.exit("Python 3.10 or higher is required to run this script")
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../"))
 data_dir = os.path.join(ROOT, "backend/data")
