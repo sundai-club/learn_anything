@@ -1,9 +1,9 @@
-import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "./contexts/ThemeContext";
+import Navbar from "@/components/navbar";
 import "./globals.css";
 import "./fonts.css";
-import Navbar from "../components/navbar";
-import { Space_Mono, Fira_Code } from "next/font/google";
+import { Space_Mono, Fira_Code, Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,32 +18,30 @@ const firaCode = Fira_Code({
   variable: "--font-fira-code",
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "DisasterResponse.AI",
   description: "Changing the world, one signal at a time",
 };
 
-export const viewport: Viewport = {
+export const viewport = {
   viewportFit: "cover",
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body
-        className={`text-black dark:text-white ${inter.className} h-screen ${spaceMono.variable} ${firaCode.variable}`}
-        style={{
-          WebkitOverflowScrolling: "touch",
-          overscrollBehavior: "none",
-        }}
-      >
-        <Navbar />
-        <div className="origin-top-left min-h-screen pt-16">{children}</div>
-      </body>
+      <ClerkProvider>
+        <body>
+          <ThemeProvider>
+            <Navbar />
+            <main className="pt-16">{children}</main>
+          </ThemeProvider>
+        </body>
+      </ClerkProvider>
     </html>
   );
 }
