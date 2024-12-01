@@ -9,12 +9,13 @@ load_dotenv()
 api_key = os.getenv("OPENAI_API_KEY")
 
 class LinkItem(BaseModel):
-    topic: str
-    link: str
+    id: str
+    name: str
     
 class ResponseOutput(BaseModel):
-    summary: str
-    top_links: list[LinkItem]
+    id: str
+    name: str
+    topics: list[LinkItem]
 
 def get_data(json_file):
     with open("cleaned_output.json", "r") as f:
@@ -23,32 +24,26 @@ def get_data(json_file):
         scraped_data = data.get("scraped_data")
         links = data.get("extracted_links", [])
     return url, scraped_data, links
-
-def parse_results(output):
-    try:
-        parsed_dict = ast.literal_eval(output)
-        return parsed_dict
-    except Exception as e:
-        print(f"An error occurred: {e}")
     
-def link_ranking(scraped_data, links):
+def link_ranking(url, scraped_data, links):
     prompt = (
         f"Analyze the following Wikipedia content and the provided links to determine the prerequisite topics needed to understand the main topic. "
         f"Create a learning path that leads up to the main topic, listing the prerequisites in order from foundational to advanced concepts.\n\n"
+        f"Main Topic Link: \n{url}\n"
         f"Main Topic Content:\n{scraped_data}\n\n"
         f"Links:\n{links}\n\n"
         "Please provide the output strictly in the following JSON format:\n"
         "{\n"
-        '  "summary": "Sample summary",\n'
-        '  "top_links": [\n'
-        '    {"topic": "Topic1", "link": "Link1"},\n'
-        '    {"topic": "Topic2", "link": "Link2"},\n'
+        '  "id": "main topic link",\n'
+        '  "name": "main  name", \n'
+        '  "topics": [\n'
+        '    {"id": "Link1", "name": "Topic1"},\n'
+        '    {"id": "Link2", "name": "Topic2"},\n'
         '    ...\n'
         "  ]\n"
         "}\n"
-        "- The 'summary' should be a short, concise summary of the main topic.\n"
-        "- The 'top_links' should be an ordered list of 10 prerequisite topics chosen from the links, leading up to the main topic and shouldn't include the main topic itself.\n"
-        "- Each object in 'top_links' contains a 'topic' and its corresponding 'link'.\n"
+        "- The 'topics' should be an ordered list of 10 prerequisite topics chosen from the links, leading up to the main topic and shouldn't include the main topic itself.\n"
+        "- Each object in 'topics' contains an 'id' and its corresponding 'name'.\n"
     )
     
     client = OpenAI(api_key=api_key)
@@ -63,20 +58,21 @@ def link_ranking(scraped_data, links):
    
 def main():
     url, scraped_data, links = get_data("cleaned_output.json")
-    parsed_result = link_ranking(scraped_data, links)
+    parsed_result = link_ranking(url, scraped_data, links)
     # with open("test.json", "w") as f:
     #     json.dump(result, f)
         
     # parsed_result = parse_results(result)
     print("\n ------------------------ \n")
-    if parsed_result:
-    # Access the summary
-        print("Summary:", parsed_result.summary)
+    with open("result.json", "w") as f:
+        json.dump(parsed_result.dict(), f)
+    print(f"Main Link: {parsed_result.id}")
+    print(f"{parsed_result.name}")
     
     # Access the top links
     print("\nTop Links:")
-    for item in parsed_result.top_links:
-        print(f"{item.topic}: {item.link}")
+    for item in parsed_result.topics:
+        print(f"{item.name}: {item.id}")
     
 main()
 

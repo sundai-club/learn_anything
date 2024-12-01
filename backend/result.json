@@ -1,0 +1,46 @@
+{
+    "id": "https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture)",
+    "name": "Transformer (deep learning architecture)",
+    "topics": [
+        {
+            "id": "https://en.wikipedia.org/wiki/Machine_learning",
+            "name": "Machine learning"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Artificial_neural_network",
+            "name": "Artificial neural network"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Deep_learning",
+            "name": "Deep learning"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Recurrent_neural_network",
+            "name": "Recurrent neural network"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Long_short-term_memory",
+            "name": "Long short-term memory (LSTM)"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Attention_(machine_learning)",
+            "name": "Attention mechanism"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Seq2seq",
+            "name": "Sequence to sequence (seq2seq)"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Feedforward_neural_network",
+            "name": "Feedforward neural network"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Word_embedding",
+            "name": "Word embedding"
+        },
+        {
+            "id": "https://en.wikipedia.org/wiki/Attention_Is_All_You_Need",
+            "name": "Attention Is All You Need"
+        }
+    ]
+}
