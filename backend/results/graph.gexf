@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='utf-8'?>
+<gexf xmlns="http://www.gexf.net/1.2draft" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gexf.net/1.2draft http://www.gexf.net/1.2draft/gexf.xsd" version="1.2">
+  <meta lastmodifieddate="2024-12-01">
+    <creator>NetworkX 3.4.2</creator>
+  </meta>
+  <graph defaultedgetype="directed" mode="static" name="">
+    <attributes mode="static" class="node">
+      <attribute id="0" title="description" type="string" />
+      <attribute id="1" title="depth" type="long" />
+    </attributes>
+    <nodes>
+      <node id="AI Research" label="AI Research">
+        <attvalues>
+          <attvalue for="0" value="Exploring artificial intelligence through advanced research and practical applications." />
+          <attvalue for="1" value="0" />
+        </attvalues>
+      </node>
+      <node id="Machine Learning" label="Machine Learning">
+        <attvalues>
+          <attvalue for="0" value="Algorithms and statistical models that enable computers to learn from data." />
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </node>
+      <node id="Deep Learning" label="Deep Learning">
+        <attvalues>
+          <attvalue for="0" value="Neural networks with multiple layers for complex pattern recognition." />
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </node>
+      <node id="Neural Networks" label="Neural Networks">
+        <attvalues>
+          <attvalue for="0" value="Computing systems inspired by biological neural networks in human brains." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Computer Vision" label="Computer Vision">
+        <attvalues>
+          <attvalue for="0" value="Enabling computers to understand and process visual information from images." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="NLP" label="NLP">
+        <attvalues>
+          <attvalue for="0" value="Processing and analyzing natural human language for various applications." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Reinforcement Learning" label="Reinforcement Learning">
+        <attvalues>
+          <attvalue for="0" value="Training agents through reward-based feedback in interactive environments." />
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </node>
+      <node id="Q-Learning" label="Q-Learning">
+        <attvalues>
+          <attvalue for="0" value="Value-based learning algorithm for optimal action selection in environments." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Policy Gradients" label="Policy Gradients">
+        <attvalues>
+          <attvalue for="0" value="Direct optimization of policy functions for decision-making in AI." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Multi-Agent" label="Multi-Agent">
+        <attvalues>
+          <attvalue for="0" value="Systems where multiple AI agents interact and learn together." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Research Areas" label="Research Areas">
+        <attvalues>
+          <attvalue for="0" value="Key focus areas in artificial intelligence research and development." />
+          <attvalue for="1" value="1" />
+        </attvalues>
+      </node>
+      <node id="Robotics" label="Robotics">
+        <attvalues>
+          <attvalue for="0" value="Integration of AI with physical systems for real-world interaction." />
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </node>
+      <node id="Perception" label="Perception">
+        <attvalues>
+          <attvalue for="0" value="Enabling robots to understand their environment through sensors." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Control" label="Control">
+        <attvalues>
+          <attvalue for="0" value="Systems for precise robot movement and interaction control." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Planning" label="Planning">
+        <attvalues>
+          <attvalue for="0" value="Algorithms for determining optimal sequences of robot actions." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="AI Ethics" label="AI Ethics">
+        <attvalues>
+          <attvalue for="0" value="Ensuring responsible and beneficial AI development and deployment." />
+          <attvalue for="1" value="2" />
+        </attvalues>
+      </node>
+      <node id="Fairness" label="Fairness">
+        <attvalues>
+          <attvalue for="0" value="Preventing bias and ensuring equitable AI system behavior." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Transparency" label="Transparency">
+        <attvalues>
+          <attvalue for="0" value="Making AI decisions interpretable and understandable to humans." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+      <node id="Safety" label="Safety">
+        <attvalues>
+          <attvalue for="0" value="Ensuring AI systems operate reliably and safely in all conditions." />
+          <attvalue for="1" value="3" />
+        </attvalues>
+      </node>
+    </nodes>
+    <edges>
+      <edge source="AI Research" target="Machine Learning" id="0" />
+      <edge source="AI Research" target="Research Areas" id="1" />
+      <edge source="Machine Learning" target="Deep Learning" id="2" />
+      <edge source="Machine Learning" target="Reinforcement Learning" id="3" />
+      <edge source="Deep Learning" target="Neural Networks" id="4" />
+      <edge source="Deep Learning" target="Computer Vision" id="5" />
+      <edge source="Deep Learning" target="NLP" id="6" />
+      <edge source="Reinforcement Learning" target="Q-Learning" id="7" />
+      <edge source="Reinforcement Learning" target="Policy Gradients" id="8" />
+      <edge source="Reinforcement Learning" target="Multi-Agent" id="9" />
+      <edge source="Research Areas" target="Robotics" id="10" />
+      <edge source="Research Areas" target="AI Ethics" id="11" />
+      <edge source="Robotics" target="Perception" id="12" />
+      <edge source="Robotics" target="Control" id="13" />
+      <edge source="Robotics" target="Planning" id="14" />
+      <edge source="AI Ethics" target="Fairness" id="15" />
+      <edge source="AI Ethics" target="Transparency" id="16" />
+      <edge source="AI Ethics" target="Safety" id="17" />
+    </edges>
+  </graph>
+</gexf>
