@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply transition-colors duration-200;
+  }
+
+  body {
+    @apply transition-colors duration-300;
+  }
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+  --transition-duration: 200ms;
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Add these scrollbar styles */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thumb-gray-300 {
+    scrollbar-color: #d1d5db transparent;
+  }
+
+  .scrollbar-track-transparent {
+    scrollbar-track-color: transparent;
+  }
+
+  .hover\:scrollbar-thumb-gray-400:hover {
+    scrollbar-color: #9ca3af transparent;
+  }
+
+  /* For Webkit browsers */
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #d1d5db;
+    border-radius: 4px;
+  }
+
+  .scrollbar-thin:hover::-webkit-scrollbar-thumb {
+    background-color: #9ca3af;
+  }
+
+  /* Add this class for horizontal scroll containers */
+  .scroll-container {
+    @apply overflow-x-auto 
+      flex 
+      space-x-6 
+      pb-4 
+      scrollbar-thin 
+      scrollbar-thumb-gray-300 
+      scrollbar-track-transparent 
+      hover:scrollbar-thumb-gray-400 
+      -mx-4 
+      px-4;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+
+  .scroll-item {
+    @apply flex-shrink-0;
+    scroll-snap-align: start;
+  }
+}
+
+html {
+  transition: background-color var(--transition-duration)
+      var(--transition-timing),
+    color var(--transition-duration) var(--transition-timing);
+}
+
+html.dark * {
+  transition-duration: var(--transition-duration);
+  transition-timing-function: var(--transition-timing);
+}
+
+/* Smooth transitions for specific properties */
+.bg-gradient-to-r,
+.bg-gradient-to-b,
+.shadow-lg,
+.shadow-xl,
+.backdrop-blur-sm {
+  transition: all var(--transition-duration) var(--transition-timing);
+}
