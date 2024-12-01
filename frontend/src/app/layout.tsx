@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import "./globals.css";
 import "./fonts.css";
 import Navbar from "../components/navbar";
-import { Space_Mono, Fira_Code } from "next/font/google";
+import { Space_Mono, Fira_Code, Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,16 +35,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`text-black dark:text-white ${inter.className} h-screen ${spaceMono.variable} ${firaCode.variable}`}
-        style={{
-          WebkitOverflowScrolling: "touch",
-          overscrollBehavior: "none",
-        }}
-      >
-        <Navbar />
-        <div className="origin-top-left min-h-screen pt-16">{children}</div>
-      </body>
+      <ClerkProvider>
+        <ThemeProvider>
+          <body
+            className={`text-black dark:text-white ${inter.className} h-screen ${spaceMono.variable} ${firaCode.variable}`}
+            style={{
+              WebkitOverflowScrolling: "touch",
+              overscrollBehavior: "none",
+            }}
+          >
+            <Navbar />
+            <div className="origin-top-left min-h-screen pt-16">{children}</div>
+          </body>
+        </ThemeProvider>
+      </ClerkProvider>
     </html>
   );
 }

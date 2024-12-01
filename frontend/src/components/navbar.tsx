@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useTheme } from "../app/contexts/ThemeContext";
+import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { isDarkMode } = useTheme();
+  const { isSignedIn, user } = useUser();
   const isPWA =
     typeof window !== "undefined" &&
     window.matchMedia("(display-mode: standalone)").matches;
@@ -55,7 +57,26 @@ const Navbar = () => {
             </Link>
           </div>
 
-          <div className="flex items-center gap-3 md:gap-4"></div>
+          <div className="flex items-center gap-3 md:gap-4">
+            {isSignedIn ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm text-secondary-light dark:text-secondary-dark">
+                  {user.firstName || user.username}
+                </span>
+                <SignOutButton>
+                  <button className="px-4 py-2 text-sm font-medium text-white bg-primary-light dark:bg-primary-dark rounded-lg hover:opacity-90">
+                    Sign Out
+                  </button>
+                </SignOutButton>
+              </div>
+            ) : (
+              <SignInButton mode="modal">
+                <button className="px-4 py-2 text-sm font-medium text-white bg-primary-light dark:bg-primary-dark rounded-lg hover:opacity-90">
+                  Sign In
+                </button>
+              </SignInButton>
+            )}
+          </div>
         </div>
       </div>
     </nav>
