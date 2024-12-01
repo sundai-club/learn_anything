@@ -1,4 +1,3 @@
-// src/components/WikiUrlForm.tsx
 "use client";
 import { useState } from 'react';
 import { KnowledgeGraph } from '../types/knowledge';
