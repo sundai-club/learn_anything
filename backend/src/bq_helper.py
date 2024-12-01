@@ -1,19 +1,26 @@
 from google.cloud import bigquery
 from google.cloud.bigquery import SchemaField
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+
+SERVICE_ACCOUNT_PATH = '/path/to/your/service-account-key.json'
+PROJECT_ID = 'sundai-club-434220-project-id'
+DATASET_ID = 'learn_anything'
+TABLE_ID = 'wiki_info'
+
+# Set the environment variable for Google Cloud credentials
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = SERVICE_ACCOUNT_PATH
 
 client = bigquery.Client()
 
-
-def connect_to_bigquery(service_account_path):
-    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = service_account_path
-    return bigquery.Client()
-
 def insert_row_if_not_exists(client, project_id, dataset_id, table_id, row_data, unique_columns):
-    # Fully qualified table reference
+    """
+    Inserts a row into BigQuery if it does not already exist based on unique columns.
+    """
     table_ref = f"{project_id}.{dataset_id}.{table_id}"
-    
-    # Construct the existence check query
     where_conditions = ' AND '.join([f"{col} = @{col}" for col in unique_columns])
     existence_query = f"""
     SELECT COUNT(*) as row_count 
@@ -21,97 +28,105 @@ def insert_row_if_not_exists(client, project_id, dataset_id, table_id, row_data,
     WHERE {where_conditions}
     """
     
-    # Prepare query parameters
-    query_params = {}
-    for col in unique_columns:
-        query_params[col] = row_data.get(col)
-    
-    # Run existence check
-    query_job = client.query(
-        existence_query, 
-        job_config=bigquery.QueryJobConfig(query_parameters=[
-            bigquery.ScalarQueryParameter(name, 'STRING', value) 
-            for name, value in query_params.items()
-        ])
-    )
-    
-    # Check if row exists
-    results = list(query_job)
-    if results[0]['row_count'] > 0:
-        print(f"Row already exists. Skipping insertion.")
-        return False
-    
-    # If row doesn't exist, insert the row
-    table = client.get_table(table_ref)
-    errors = client.insert_rows_json(table, [row_data])
-    
-    if errors:
-        print(f"Errors inserting row: {errors}")
-        return False
-    
-    print("Row inserted successfully.")
-    return True
-
-def create_example_table(client, project_id, dataset_id, table_id):
-    table_ref = f"{project_id}.{dataset_id}.{table_id}"
-    
-    # Define table schema
-    schema = [
-        SchemaField('user_id', 'STRING', mode='REQUIRED'),
-        SchemaField('email', 'STRING', mode='REQUIRED'),
-        SchemaField('name', 'STRING', mode='NULLABLE'),
-        SchemaField('created_at', 'TIMESTAMP', mode='REQUIRED')
-    ]
-    
-    # Create table
-    table = bigquery.Table(table_ref, schema=schema)
-    table = client.create_table(table, exists_ok=True)
-    print(f"Table {table_id} created or already exists.")
-
-def main():
-    # Replace with your actual paths and IDs
-    SERVICE_ACCOUNT_PATH = '/path/to/your/service-account-key.json'
-    PROJECT_ID = 'your-project-id'
-    DATASET_ID = 'your_dataset'
-    TABLE_ID = 'users'
-    
     try:
-        # Connect to BigQuery
-        client = connect_to_bigquery(SERVICE_ACCOUNT_PATH)
-        
-        # Create example table (optional)
-        create_example_table(client, PROJECT_ID, DATASET_ID, TABLE_ID)
-        
-        # Example row to insert
-        row_data = {
-            'user_id': 'user123',
-            'email': 'john.doe@example.com',
-            'name': 'John Doe',
-            'created_at': bigquery.TIMESTAMP_NOW
+        query_params = {
+            col: row_data.get(col) for col in unique_columns
         }
         
-        # Attempt to insert row (prevent duplicates based on user_id)
-        insert_row_if_not_exists(
-            client, 
-            PROJECT_ID, 
-            DATASET_ID, 
-            TABLE_ID, 
-            row_data, 
-            unique_columns=['user_id']
+        query_job = client.query(
+            existence_query, 
+            job_config=bigquery.QueryJobConfig(query_parameters=[
+                bigquery.ScalarQueryParameter(name, 'STRING', value) 
+                for name, value in query_params.items()
+            ])
         )
         
-        # Try to insert the same row again (should be skipped)
-        insert_row_if_not_exists(
-            client, 
-            PROJECT_ID, 
-            DATASET_ID, 
-            TABLE_ID, 
-            row_data, 
-            unique_columns=['user_id']
-        )
+        results = list(query_job)
+        if results[0].row_count > 0:
+            logging.info("Row already exists. Skipping insertion.")
+            return False
         
+        table = client.get_table(table_ref)
+        errors = client.insert_rows_json(table, [row_data])
+        
+        if errors:
+            logging.error(f"Errors inserting row: {errors}")
+            return False
+        
+        logging.info("Row inserted successfully.")
+        return True
+    
     except Exception as e:
-        print(f"An error occurred: {e}")
+        logging.error(f"An error occurred while inserting the row: {e}")
+        return False
 
-if __name__ == '__main__':
-    main()
+def save_graph_to_bq(user_id, url, graph):
+    """
+    Saves a graph to BigQuery for the specified user and URL.
+    """
+    row_data = {
+        'user_id': user_id,
+        'url': url,
+        'graph': graph
+    }
+    success = insert_row_if_not_exists(
+        client, 
+        PROJECT_ID, 
+        DATASET_ID, 
+        TABLE_ID, 
+        row_data, 
+        unique_columns=['user_id']
+    )
+    if success:
+        logging.info("Graph saved to BigQuery")
+
+def get_graph_from_bq(user_id, url):
+    """
+    Retrieves a graph from BigQuery based on the user ID and URL.
+    """
+    query = f"SELECT graph FROM `{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}` WHERE user_id = '{user_id}' AND url = '{url}'"
+    try:
+        query_job = client.query(query)
+        results = list(query_job)
+        if len(results) == 0:
+            logging.info("No graph found for the specified user ID and URL.")
+            return None
+        return results[0].graph
+    except Exception as e:
+        logging.error(f"An error occurred while retrieving the graph: {e}")
+        return None
+
+def save_wiki_info_to_bq(url, wiki_info):
+    """
+    Saves wiki information to BigQuery for the specified URL.
+    """
+    row = {
+        'url': url,
+        'wiki_info': wiki_info
+    }
+    success = insert_row_if_not_exists(
+        client, 
+        PROJECT_ID, 
+        DATASET_ID, 
+        TABLE_ID, 
+        row, 
+        unique_columns=['url']
+    )
+    if success:
+        logging.info("Wiki info saved to BigQuery")
+
+def get_wiki_info_from_bq(url):
+    """
+    Retrieves wiki information from BigQuery.
+    """
+    query = f"SELECT wiki_info FROM `{PROJECT_ID}.{DATASET_ID}.{TABLE_ID}` WHERE url = '{url}'"
+    try:
+        query_job = client.query(query)
+        results = list(query_job)
+        if len(results) == 0:
+            logging.info("No wiki info found in the table.")
+            return None
+        return results[0].wiki_info
+    except Exception as e:
+        logging.error(f"An error occurred while retrieving wiki info: {e}")
+        return None
