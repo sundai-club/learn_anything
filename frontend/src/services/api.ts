@@ -11,7 +11,7 @@ const api = axios.create({
 export const knowledgeService = {
     async processWikiLink(wikiUrl: string): Promise<KnowledgeGraph> {
         const { data } = await api.post<KnowledgeGraph>('/get-graph', {
-            url: wikiUrl, // Send "url" directly at the top level of the body
+            url: wikiUrl,
         });
         return data;
     }
