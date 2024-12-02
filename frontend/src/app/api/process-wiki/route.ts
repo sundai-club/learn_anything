@@ -3,130 +3,106 @@ import { NextResponse } from "next/server";
 const dummyData = {
   domains: [
     {
-      id: "cs",
+      id: "https://en.wikipedia.org/wiki/Computer_science",
       name: "Computer Science",
-      description: "Study of computation, algorithms, and information systems",
+      description: "Study of computation and information processing",
       topics: [
         {
-          id: "cs_algo",
+          id: "https://en.wikipedia.org/wiki/Algorithm",
           name: "Algorithms",
-          description: "Methods for solving problems step by step",
+          description: "Step-by-step procedures for calculations",
           details: [
             "Sorting algorithms",
             "Search algorithms",
-            "Dynamic programming",
             "Graph algorithms",
-            "Optimization techniques",
+            "Dynamic programming",
+            "Optimization methods",
+          ],
+          subtopics: [
+            {
+              id: "https://en.wikipedia.org/wiki/Sorting_algorithm",
+              name: "Sorting Algorithms",
+              description: "Methods for ordering data elements",
+              children: [
+                {
+                  id: "https://en.wikipedia.org/wiki/Quicksort",
+                  name: "QuickSort",
+                  description: "Fast divide-and-conquer sorting",
+                },
+                {
+                  id: "https://en.wikipedia.org/wiki/Merge_sort",
+                  name: "MergeSort",
+                  description: "Stable divide-and-conquer sorting",
+                },
+              ],
+            },
           ],
         },
         {
-          id: "cs_ds",
+          id: "https://en.wikipedia.org/wiki/Data_structure",
           name: "Data Structures",
-          description: "Ways to organize and store data efficiently",
+          description: "Ways to organize data efficiently",
           details: [
             "Arrays and Lists",
             "Trees and Graphs",
             "Hash Tables",
             "Heaps",
-            "Advanced data structures",
+            "Advanced structures",
           ],
         },
         {
-          id: "cs_ai",
-          name: "AI & ML",
-          description: "Systems that can learn and make decisions",
+          id: "https://en.wikipedia.org/wiki/Artificial_intelligence",
+          name: "Artificial Intelligence",
+          description: "Systems that simulate intelligence",
           details: [
-            "Machine Learning basics",
+            "Machine Learning",
             "Neural Networks",
             "Natural Language Processing",
             "Computer Vision",
-            "Reinforcement Learning",
+            "Robotics",
           ],
         },
       ],
     },
     {
-      id: "math",
+      id: "https://en.wikipedia.org/wiki/Mathematics",
       name: "Mathematics",
-      description: "Foundation of quantitative and logical reasoning",
+      description: "Study of numbers, quantities, and shapes",
       topics: [
         {
-          id: "math_calc",
+          id: "https://en.wikipedia.org/wiki/Calculus",
           name: "Calculus",
-          description: "Study of continuous change and motion",
+          description: "Study of continuous change",
           details: [
-            "Limits and Continuity",
-            "Derivatives and Applications",
-            "Integration Techniques",
-            "Multivariable Calculus",
-            "Differential Equations",
+            "Limits",
+            "Derivatives",
+            "Integrals",
+            "Series",
+            "Vector Calculus",
           ],
         },
         {
-          id: "math_alg",
-          name: "Linear Algebra",
-          description: "Study of vectors, matrices, and linear systems",
+          id: "https://en.wikipedia.org/wiki/Algebra",
+          name: "Algebra",
+          description: "Study of mathematical structures",
           details: [
-            "Vector Spaces",
-            "Matrix Operations",
-            "Eigenvalues & Eigenvectors",
-            "Linear Transformations",
-            "Applications in 3D Graphics",
+            "Linear Algebra",
+            "Abstract Algebra",
+            "Number Theory",
+            "Group Theory",
+            "Ring Theory",
           ],
         },
         {
-          id: "math_prob",
-          name: "Probability",
-          description: "Analysis of random phenomena and uncertainty",
+          id: "https://en.wikipedia.org/wiki/Statistics",
+          name: "Statistics",
+          description: "Analysis of data and probability",
           details: [
             "Probability Theory",
-            "Random Variables",
-            "Distributions",
             "Statistical Inference",
-            "Stochastic Processes",
-          ],
-        },
-      ],
-    },
-    {
-      id: "physics",
-      name: "Physics",
-      description: "Study of matter, energy, and fundamental forces",
-      topics: [
-        {
-          id: "phys_mech",
-          name: "Mechanics",
-          description: "Motion and behavior of physical objects",
-          details: [
-            "Newton's Laws",
-            "Conservation Laws",
-            "Rotational Motion",
-            "Gravitation",
-            "Fluid Dynamics",
-          ],
-        },
-        {
-          id: "phys_em",
-          name: "Electromagnetism",
-          description: "Electric and magnetic phenomena",
-          details: [
-            "Electric Fields",
-            "Magnetic Fields",
-            "Maxwell's Equations",
-            "Electromagnetic Waves",
-            "Circuit Theory",
-          ],
-        },
-        {
-          id: "phys_quantum",
-          name: "Quantum Physics",
-          description: "Behavior of matter at atomic scales",
-          details: [
-            "Wave-Particle Duality",
-            "Schrödinger Equation",
-            "Quantum States",
-            "Atomic Structure",
-            "Quantum Computing",
+            "Regression Analysis",
+            "Hypothesis Testing",
+            "Bayesian Statistics",
           ],
         },
       ],
@@ -146,12 +122,9 @@ export async function GET(request: Request) {
       );
     }
 
-    console.log("Processing URL:", url);
-
-    // For now, return the dummy data
     return NextResponse.json(dummyData);
   } catch (error) {
-    console.error("Error processing request:", error);
+    console.error("Error:", error);
     return NextResponse.json(
       { error: "Failed to process request" },
       { status: 500 }

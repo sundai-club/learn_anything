@@ -3,15 +3,73 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useTheme } from "./contexts/ThemeContext";
-import { KnowledgeGraph as KnowledgeGraphType } from '../types/knowledge';
-import { KnowledgeGraph } from '../components/knowledgeGraph';
-import { WikiUrlForm } from '../components/wikiUrlForm';
+import { KnowledgeGraph as KnowledgeGraphType } from "../types/knowledge";
+import { KnowledgeGraph } from "../components/knowledgeGraph";
+import { WikiUrlForm } from "../components/wikiUrlForm";
+import { ProgressMap } from "@/types/knowledge";
 
 export default function Home() {
   const { isDarkMode } = useTheme();
-  const [knowledgeData, setKnowledgeData] = useState<KnowledgeGraphType | null>(null);
+  const [knowledgeData, setKnowledgeData] = useState<KnowledgeGraphType | null>(
+    null
+  );
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
+  const [progress, setProgress] = useState<ProgressMap>({});
+
+  const handleProgressUpdate = (nodeId: string, completed: boolean) => {
+    setProgress((prev) => ({
+      ...prev,
+      [nodeId]: { completed, timestamp: Date.now() },
+    }));
+  };
+
+  const handleNodeClick = async (
+    nodeId: string,
+    newData: KnowledgeGraphType
+  ) => {
+    setKnowledgeData((prevData) => {
+      if (!prevData) return newData;
+
+      // Deep clone the previous data
+      const updatedData = JSON.parse(JSON.stringify(prevData));
+
+      // Find the clicked node and extend its children
+      const extendNode = (domains: Domain[]) => {
+        for (const domain of domains) {
+          if (domain.id === nodeId) {
+            // Extend domain with new topics
+            domain.topics = [
+              ...(domain.topics || []),
+              ...(newData?.domains?.[0]?.topics || []),
+            ];
+            return true;
+          }
+          // Check topics
+          if (domain.topics) {
+            for (const topic of domain.topics) {
+              if (topic.id === nodeId) {
+                // Extend topic with new subtopics
+                topic.topics = [
+                  ...(topic.topics || []),
+                  ...(newData?.domains?.[0]?.topics || []),
+                ];
+                return true;
+              }
+              // Check subtopics recursively
+              if (topic.topics && extendNode(topic.topics)) {
+                return true;
+              }
+            }
+          }
+        }
+        return false;
+      };
+
+      extendNode(updatedData.domains);
+      return updatedData;
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background-light to-surface-light dark:from-background-dark dark:to-surface-dark">
@@ -46,7 +104,9 @@ export default function Home() {
           >
             {processing && (
               <div className="flex justify-center items-center h-[800px] bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg">
-                <div className="text-secondary-light dark:text-secondary-dark">Processing Wikipedia content...</div>
+                <div className="text-secondary-light dark:text-secondary-dark">
+                  Processing Wikipedia content...
+                </div>
               </div>
             )}
             {error && (
@@ -55,7 +115,13 @@ export default function Home() {
               </div>
             )}
             {!processing && !error && knowledgeData && (
-              <KnowledgeGraph data={knowledgeData} isDarkMode={isDarkMode} />
+              <KnowledgeGraph
+                data={knowledgeData}
+                isDarkMode={isDarkMode}
+                onProgressUpdate={handleProgressUpdate}
+                progress={progress}
+                onNodeClick={handleNodeClick}
+              />
             )}
             {!processing && !error && !knowledgeData && (
               <div className="flex justify-center items-center h-[800px] bg-surface-light dark:bg-surface-dark rounded-xl shadow-lg">

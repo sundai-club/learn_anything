@@ -1,21 +1,38 @@
 import { ReactNode } from "react";
 
+interface Progress {
+  completed: boolean;
+  timestamp?: number;
+}
+
+export interface ProgressMap {
+  [nodeId: string]: Progress;
+}
+
 export interface Topic {
   id: string;
   name: string;
-  description: string;
-  details: string[];
+  description?: string;
+  details?: string[];
+  progress?: Progress;
 }
 
 export interface Domain {
   id: string;
   name: string;
-  description: string;
-  topics: Topic[];
+  description?: string;
+  topics?: Topic[];
 }
 
 export interface KnowledgeGraph {
   domains: Domain[];
+}
+
+export interface KnowledgeGraphProps {
+  data: KnowledgeGraph | null;
+  isDarkMode: boolean;
+  onProgressUpdate: (nodeId: string, completed: boolean) => void;
+  progress: ProgressMap;
 }
 
 export interface GraphNodeLabel {
@@ -30,13 +47,29 @@ export interface GraphNodeLabel {
       width: number;
       align: string;
     };
-    desc: {
+    link: {
       fontSize: number;
       color: string;
       lineHeight: number;
       width: number;
       align: string;
-      overflow: string;
+      padding: number[];
+      textDecoration?: string;
+    };
+    progress: {
+      fontSize: number;
+      color: string;
+      padding: number[];
+      width: number;
+      align: string;
+      fontWeight?: string;
+    };
+    status: {
+      fontSize: number;
+      color: string;
+      padding: number[];
+      width: number;
+      align: string;
     };
   };
 }

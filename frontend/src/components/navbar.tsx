@@ -52,7 +52,7 @@ const Navbar = () => {
                   isDarkMode ? "text-secondary-dark" : "text-secondary-light"
                 } hover:text-primary-light dark:hover:text-primary-dark transition-colors`}
               >
-                Mihir-Research.AI
+                LearnEasy.AI
               </span>
             </Link>
           </div>
