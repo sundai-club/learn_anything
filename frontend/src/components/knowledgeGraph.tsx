@@ -162,33 +162,6 @@ export function KnowledgeGraph({
     const edges: GraphEdge[] = [];
 
     // Create center node
-    graphData.push({
-      id: "-1",
-      name: "Learn Anything",
-      symbolSize: [220, 100],
-      symbol: "roundRect",
-      fixed: true,
-      x: chart.getWidth() / 2,
-      y: chart.getHeight() / 2,
-      itemStyle: {
-        color: "#FFFFFF",
-        borderColor: isDarkMode ? "#64748B" : "#4B5563",
-        borderRadius: 6,
-      },
-      label: {
-        show: true,
-        position: "inside",
-        formatter: "{title|Learn Anything}",
-        rich: {
-          title: {
-            fontSize: 14,
-            fontWeight: "bold",
-            width: 200,
-            align: "center",
-          },
-        },
-      },
-    });
 
     // Process domain (there's only one in this case)
     const domain = data.domains[0];
