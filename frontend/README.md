@@ -51,10 +51,6 @@
 
 1.  **Clone the Repository**:
     
-    bash
-    
-    Copy code
-    
     `git clone https://github.com/sundai-club/learn_anything.git
     cd learn_anything/frontend` 
     
