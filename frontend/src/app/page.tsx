@@ -3,7 +3,10 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useTheme } from "./contexts/ThemeContext";
-import { KnowledgeGraph as KnowledgeGraphType } from "../types/knowledge";
+import {
+  Domain,
+  KnowledgeGraph as KnowledgeGraphType,
+} from "../types/knowledge";
 import { KnowledgeGraph } from "../components/knowledgeGraph";
 import { WikiUrlForm } from "../components/wikiUrlForm";
 import { ProgressMap } from "@/types/knowledge";

@@ -119,7 +119,7 @@ export function KnowledgeGraph({
       position: "inside",
       formatter: [
         `{title|${node.name}}`,
-        `{link|${node.id}}`,
+        // `{link|${node.id}}`,
         isLoading
           ? "{status|Loading...}"
           : isCompleted
@@ -158,95 +158,125 @@ export function KnowledgeGraph({
     if (!chartRef.current || !data) return;
 
     const chart = echarts.init(chartRef.current);
-
     const graphData: GraphNode[] = [];
-
     const edges: GraphEdge[] = [];
 
-    data.domains.forEach((domain) => {
-      const domainId = domain.id;
-      const domainProgress = calculateProgress(domainId);
-      const domainCompleted = domainProgress === 100;
-
-      graphData.push({
-        id: domainId,
-        name: domain.name,
-        symbolSize: [220, 100],
-        symbol: "roundRect",
-        itemStyle: getNodeStyle(domain, domainCompleted),
-        label: {
-          show: true,
-          position: "inside",
-          formatter: [
-            `{title|${domain.name}}`,
-            `{link|${domain.id}}`,
-            domainProgress > 0
-              ? `{progress|${Math.round(domainProgress)}% Complete}`
-              : "",
-            domainCompleted ? "{status|✓}" : "",
-          ]
-            .filter(Boolean)
-            .join("\n"),
-          rich: {
-            title: {
-              fontSize: 14,
-              fontWeight: "bold",
-              padding: [0, 0, 4, 0],
-              width: 200,
-              align: "center",
-            },
-            link: {
-              fontSize: 10,
-              color: "#3B82F6",
-              lineHeight: 14,
-              width: 190,
-              align: "center",
-              padding: [0, 4],
-              textDecoration: "underline",
-            },
-            progress: {
-              fontSize: 11,
-              color: "#10B981",
-              padding: [4, 0],
-              width: 200,
-              align: "center",
-              fontWeight: "bold",
-            },
-            status: {
-              fontSize: 16,
-              color: "#10B981",
-              padding: [2, 0],
-              width: 200,
-              align: "center",
-            },
+    // Create center node
+    graphData.push({
+      id: "-1",
+      name: "Learn Anything",
+      symbolSize: [220, 100],
+      symbol: "roundRect",
+      fixed: true,
+      x: chart.getWidth() / 2,
+      y: chart.getHeight() / 2,
+      itemStyle: {
+        color: "#FFFFFF",
+        borderColor: isDarkMode ? "#64748B" : "#4B5563",
+        borderRadius: 6,
+      },
+      label: {
+        show: true,
+        position: "inside",
+        formatter: "{title|Learn Anything}",
+        rich: {
+          title: {
+            fontSize: 14,
+            fontWeight: "bold",
+            width: 200,
+            align: "center",
           },
         },
+      },
+    });
+
+    // Process domain (there's only one in this case)
+    const domain = data.domains[0];
+    const domainId = domain.id;
+    const domainProgress = calculateProgress(domainId);
+    const domainCompleted = domainProgress === 100;
+
+    // Add domain node
+    graphData.push({
+      id: domainId,
+      name: domain.name,
+      symbolSize: [220, 100],
+      symbol: "roundRect",
+      itemStyle: getNodeStyle(domain, domainCompleted),
+      label: {
+        show: true,
+        position: "inside",
+        formatter: [
+          `{title|${domain.name}}`,
+          // `{link|${domain.id}}`,
+          domainProgress > 0
+            ? `{progress|${Math.round(domainProgress)}% Complete}`
+            : "",
+          domainCompleted ? "{status|✓}" : "",
+        ]
+          .filter(Boolean)
+          .join("\n"),
+        rich: {
+          title: {
+            fontSize: 14,
+            fontWeight: "bold",
+            padding: [0, 0, 4, 0],
+            width: 200,
+            align: "center",
+          },
+          link: {
+            fontSize: 10,
+            color: "#3B82F6",
+            lineHeight: 14,
+            width: 190,
+            align: "center",
+            padding: [0, 4],
+            textDecoration: "underline",
+          },
+          progress: {
+            fontSize: 11,
+            color: "#10B981",
+            padding: [4, 0],
+            width: 200,
+            align: "center",
+            fontWeight: "bold",
+          },
+          status: {
+            fontSize: 16,
+            color: "#10B981",
+            padding: [2, 0],
+            width: 200,
+            align: "center",
+          },
+        },
+      },
+    });
+
+    // Connect domain to center
+    edges.push({
+      source: "-1",
+      target: domainId,
+      lineStyle: { curveness: 0.2 },
+    });
+
+    // Process topics
+    domain.topics.forEach((topic) => {
+      const topicId = topic.id;
+      const isCompleted = progress[topicId]?.completed;
+
+      graphData.push({
+        id: topicId,
+        name: topic.name,
+        symbolSize: [180, 80],
+        symbol: "roundRect",
+        itemStyle: getNodeStyle(topic, isCompleted),
+        label: getNodeLabel(topic, isCompleted),
       });
 
       edges.push({
-        source: "-1",
-        target: domainId,
+        source: domainId,
+        target: topicId,
         lineStyle: { curveness: 0.2 },
-      });
-
-      domain.topics.forEach((topic) => {
-        const topicId = topic.id;
-        const isCompleted = progress[topicId]?.completed;
-
-        graphData.push({
-          id: topicId,
-          name: topic.name,
-          symbolSize: [180, 80],
-          symbol: "roundRect",
-          itemStyle: getNodeStyle(topic, isCompleted),
-          label: getNodeLabel(topic, isCompleted),
-        });
-
-        edges.push({
-          source: domainId,
-          target: topicId,
-          lineStyle: { curveness: 0.2 },
-        });
       });
     });
 
@@ -333,7 +363,7 @@ export function KnowledgeGraph({
 
         // Navigate to Wikipedia link if it exists
         if (nodeId.startsWith("http")) {
-          window.location.href = nodeId;
+          window.open(nodeId, "_blank", "noopener,noreferrer");
         }
 
         // Toggle completion if not center node
