@@ -1,106 +1,166 @@
-# Mihir-Research.AI
 
-An interactive visualization platform for exploring artificial intelligence research areas and concepts.
+# LearnEasy.AI
 
-## Project Overview
+**LearnEasy.AI** is an interactive learning platform that generates visual knowledge maps from Wikipedia URLs. Users can explore topics and subtopics in an engaging, interactive graph format.
 
-This project provides an intuitive, visual way to explore AI research topics through an interactive tree diagram. It features:
+## Features
 
-- Dynamic node exploration
-- Detailed descriptions of AI concepts
-- Interactive visualizations
-- Dark/Light mode support
-- Responsive design
+### Key Features:
 
-### Key Features
+-   **Dynamic Knowledge Graphs**: Generate and interact with knowledge maps of domains and topics.
+-   **Wikipedia Integration**: Input a Wikipedia URL to create custom visualizations.
+-   **Dark Mode Support**: Seamless light/dark theme transitions.
+-   **User Authentication**: Powered by Clerk for user sign-in and sign-up.
+-   **Real-time Progress Tracking**: Save and display user progress on explored topics.
 
-#### 1. Interactive Tree Visualization
+### Frontend Components:
 
-- Expandable/collapsible nodes
-- Detailed tooltips
-- Smooth animations
-- Hierarchical data representation
-
-#### 2. Research Areas Covered
-
-- Machine Learning
-  - Deep Learning
-  - Reinforcement Learning
-- AI Ethics
-- Robotics
-- Natural Language Processing
-
-#### 3. Technical Implementation
-
-```typescript
-interface TreeNode {
-  name: string
-  value: string
-  desc: string
-  children?: TreeNode[]
-}
-```
+-   **KnowledgeGraph**: Renders the interactive graph using ECharts.
+-   **WikiUrlForm**: Accepts Wikipedia URLs for processing.
+-   **NodeModal**: Displays additional information for nodes in the graph.
+-   **Navbar**: Responsive navigation bar with authentication integration.
 
 ## Technology Stack
 
-- **Frontend**: Next.js, React
-- **Visualization**: ECharts
-- **Styling**: TailwindCSS
-- **Animations**: Framer Motion
-- **TypeScript** for type safety
+### Frameworks and Libraries:
 
-## Getting Started
+-   **Frontend**: [Next.js](https://nextjs.org/), [Tailwind CSS](https://tailwindcss.com/)
+-   **Graph Library**: [ECharts](https://echarts.apache.org/)
+-   **Animation**: Framer Motion
+-   **State Management**: React Context
+-   **Authentication**: [Clerk](https://clerk.dev/)
 
-1. Clone the repository:
+### Backend:
 
-```bash
-git clone https://github.com/yourusername/mihir-research-ai.git
+-   **API**: Hosted on Google Cloud Run
+-   **Knowledge Graph Processing**: Custom API with Wikipedia scraping capabilities
+
+### Utilities:
+
+-   **TypeScript**: For type safety.
+-   **Axios**: For API calls.
+
+## Installation
+
+### Prerequisites:
+
+-   Node.js >= 16.x
+-   npm or yarn package manager
+
+### Steps:
+
+1.  **Clone the Repository**:
+    
+    bash
+    
+    Copy code
+    
+    `git clone https://github.com/sundai-club/learn_anything.git
+    cd learn_anything/frontend` 
+    
+2.  **Install Dependencies**:
+    
+
+    ```sh
+    npm install
+	```
+     
+    
+3.  **Run the Development Server**:
+    
+
+    ```sh 
+    npm run dev
+    ``` 
+        
+4.  **Set up Environment Variables**: Add a `.env.local` file with the following:
+    
+
+    ```sh
+    NEXT_PUBLIC_CLERK_FRONTEND_API=your-clerk-frontend-api
+    NEXT_PUBLIC_API_BASE_URL=https://learn-anything-199983032721.us-central1.run.app
+    ``` 
+    
+
+## Project Structure
+
+
+```/frontend
+├── public/               # Public assets (favicon, logos, etc.)
+├── src/
+│   ├── app/              # Next.js application structure
+│   │   ├── api/          # API routes
+│   │   ├── components/   # UI components
+│   │   ├── contexts/     # Context providers (e.g., ThemeContext)
+│   │   ├── types/        # TypeScript type definitions
+│   │   └── services/     # API services
+│   └── styles/           # Global and component-specific styles
+├── tailwind.config.ts    # Tailwind CSS configuration
+└── tsconfig.json         # TypeScript configuration` 
 ```
+## API Endpoints
 
-2. Install dependencies:
+### `/get-graph`
 
-```bash
-npm install
-```
+-   **Method**: POST
+-   **Description**: Processes a Wikipedia URL to generate the knowledge graph.
+-   **Request Body**:
+    
+  
+   
+    ```
+    {
+      "url": "https://en.wikipedia.org/wiki/Computer_science"
+    }
+    ``` 
+    
+-   **Response**:
+    
+    ```
+    {
+      "domains": [
+        {
+          "id": "https://en.wikipedia.org/wiki/Computer_science",
+          "name": "Computer Science",
+          "topics": [ ... ]
+        }
+      ]
+    }
+    ``` 
+    
 
-3. Start the development server:
+## Tailwind Customizations
 
-```bash
-npm run dev
-```
+Key extensions in `tailwind.config.ts`:
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## Development
-
-### Project Structure
-
-```
-src/
-  ├── app/                 # Next.js app directory
-  │   ├── page.tsx        # Main visualization page
-  │   └── contexts/       # Theme and other contexts
-  ├── components/         # Reusable components
-  └── types/             # TypeScript type definitions
-```
-
-### Key Components
-
-- Interactive Tree Visualization
-- Theme Toggle
-- Responsive Navigation
-- Motion Animations
+-   Custom color schemes for light and dark mode.
+-   Gradient backgrounds and smooth transition animations.
+-   Scrollbar styles for enhanced user experience.
 
 ## Contributing
 
-We welcome contributions! Please feel free to submit a Pull Request.
+1.  **Fork** the repository.
+2.  Create a new **branch**:
+    
+    ```sh
+    git checkout -b feature-name
+    ``` 
+    
+3.  **Commit** your changes:
+        
+    ```sh
+    git commit -m "Add new feature"
+    ``` 
+    
+4.  **Push** to the branch:
+    
+    
+    ```sh
+    git push origin feature-name
+    ``` 
+    
+5.  Create a **Pull Request**.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- ECharts for the visualization library
-- Next.js team for the framework
-- TailwindCSS for the styling system
+MIT License.
