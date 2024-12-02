@@ -70,14 +70,3 @@ def scrape_and_clean_wikipedia(url):
     }
 
     return cleaned_data
-
-# Main function
-if __name__ == "__main__":
-    url = "https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture)"
-    cleaned_data = scrape_and_clean_wikipedia(url)
-    if cleaned_data:
-        # Save the cleaned output to a JSON file
-        output_file_path = os.path.join(results_dir, "scraped_data.json")
-        with open(output_file_path, "w", encoding="utf-8") as f:
-            json.dump(cleaned_data, f, indent=4, ensure_ascii=False)
-        print(f"Cleaned data saved in '{output_file_path}'!")

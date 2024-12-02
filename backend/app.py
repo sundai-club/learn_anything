@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.graph_creation import create_graph
-from src.bq_helper import save_graph_to_bq, get_graph_from_bq, save_wiki_info_to_bq, get_wiki_info_from_bq
+from src.get_graph_data import create_graph
+# from src.bq_helper import save_graph_to_bq, get_graph_from_bq, save_wiki_info_to_bq, get_wiki_info_from_bq
 
 
 dummy_data = {
@@ -48,8 +48,8 @@ async def root():
 @app.post("/get-graph")
 def get_graph(request: dict):
     url = request["url"]
-    # return {"graph": create_graph(url)}
-    return dummy_data
+    return {"domains": create_graph(url)}
+    # return dummy_data
 
 
 # @app.post("/save_graph_to_bq")
