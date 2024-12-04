@@ -1,32 +1,48 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from src.get_graph_data import create_graph
-# from src.bq_helper import save_graph_to_bq, get_graph_from_bq, save_wiki_info_to_bq, get_wiki_info_from_bq
 
+from backend.src.get_graph_data import create_graph
 
 dummy_data = {
-  "domains": [
-    {
-      "id": "cs",
-      "name": "Computer Science",
-      "topics": [
-        { "id": "cs_algo", "name": "Algorithms" },
-        { "id": "cs_ds", "name": "Data Structures" },
-        { "id": "cs_ai", "name": "Artificial Intelligence" }
-      ]
-    },
-    {
-      "id": "math",
-      "name": "Mathematics",
-      "topics": [
-        { "id": "math_calc", "name": "Calculus" },
-        { "id": "math_alg", "name": "Algebra" },
-        { "id": "math_stats", "name": "Statistics" }
-      ]
-    }
-  ]
+    "domains": [
+        {
+            "id": "cs",
+            "name": "Computer Science",
+            "topics": [
+                {
+                    "id": "cs_algo",
+                    "name": "Algorithms"
+                },
+                {
+                    "id": "cs_ds",
+                    "name": "Data Structures"
+                },
+                {
+                    "id": "cs_ai",
+                    "name": "Artificial Intelligence"
+                },
+            ],
+        },
+        {
+            "id": "math",
+            "name": "Mathematics",
+            "topics": [
+                {
+                    "id": "math_calc",
+                    "name": "Calculus"
+                },
+                {
+                    "id": "math_alg",
+                    "name": "Algebra"
+                },
+                {
+                    "id": "math_stats",
+                    "name": "Statistics"
+                },
+            ],
+        },
+    ]
 }
-
 
 app = FastAPI()
 
@@ -40,15 +56,20 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {
+        "message": "Hello World"
+    }
 
 
 @app.post("/get-graph")
 def get_graph(request: dict):
     url = request["url"]
-    return {"domains": create_graph(url)}
+    return {
+        "domains": create_graph(url)
+    }
     # return dummy_data
 
 
@@ -78,7 +99,7 @@ def get_graph(request: dict):
 #     url = request["url"]
 #     return {"wiki_info": get_wiki_info(url)}
 
-
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

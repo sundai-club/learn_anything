@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
+import json
+import os
+import re
+
 import requests
 from bs4 import BeautifulSoup
-import json
-import re
-import os
 
-
-ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../../"))
+ROOT = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "../../../")
+)
 data_dir = os.path.join(ROOT, "backend/data")
 results_dir = os.path.join(ROOT, "backend/results")
 
@@ -21,26 +24,39 @@ def extract_links(soup):
         if not url.startswith("http"):
             url = "https://en.wikipedia.org" + url
         if topic:  # Avoid empty topics
-            links.append({'link': url, 'topic': topic})
+            links.append({
+                "link": url,
+                "topic": topic
+            })
     return links
+
 
 # Extract paragraphs from the page
 def extract_paragraphs(soup):
     paragraphs = [p.get_text(strip=True) for p in soup.find_all("p")]
-    return [p for p in paragraphs if p and len(p) > 10]  # Filter out empty or short paragraphs
+    return [
+        p for p in paragraphs if p and len(p) > 10
+    ]  # Filter out empty or short paragraphs
+
 
 # Function to clean text: remove numbers, references, and special characters
 def clean_text(text):
-    text = re.sub(r'\[[^\]]*\]', '', text)  # Remove [references]
-    text = re.sub(r'\(.*?\)', '', text)    # Remove parentheses and their content
-    text = re.sub(r'\d+', '', text)        # Remove numbers
-    text = re.sub(r'[^\w\s]', '', text)    # Remove special characters except whitespace
-    text = re.sub(r'\s+', ' ', text).strip()  # Replace multiple spaces with a single space and trim
+    text = re.sub(r"\[[^\]]*\]", "", text)  # Remove [references]
+    text = re.sub(r"\(.*?\)", "", text)  # Remove parentheses and their content
+    text = re.sub(r"\d+", "", text)  # Remove numbers
+    text = re.sub(r"[^\w\s]", "", text)  # Remove special characters except whitespace
+    text = re.sub(r"\s+",
+                  " ",
+                  text).strip()  # Replace multiple spaces with a single space and trim
     return text
+
 
 # Function to clean topics by removing numeric prefixes
 def clean_topic(topic):
-    return re.sub(r'^\d+(\.\d+)*', '', topic).strip()  # Remove leading numbers like 2.3, 3, etc.
+    return re.sub(r"^\d+(\.\d+)*",
+                  "",
+                  topic).strip()  # Remove leading numbers like 2.3, 3, etc.
+
 
 # Scrape Wikipedia and return cleaned output
 def scrape_and_clean_wikipedia(url):
@@ -49,7 +65,10 @@ def scrape_and_clean_wikipedia(url):
         print(f"Failed to fetch the page: {response.status_code}")
         return None
 
-    soup = BeautifulSoup(response.text, "html.parser")  # Parse the content with BeautifulSoup
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser"
+    )  # Parse the content with BeautifulSoup
 
     # Extract data
     links = extract_links(soup)
@@ -62,11 +81,11 @@ def scrape_and_clean_wikipedia(url):
 
     # Prepare the cleaned output
     cleaned_data = {
-        'url': url,
-        'scraped_data': {
-            'paragraphs': cleaned_paragraphs,
+        "url": url,
+        "scraped_data": {
+            "paragraphs": cleaned_paragraphs,
         },
-        'extracted_links': links
+        "extracted_links": links,
     }
 
     return cleaned_data

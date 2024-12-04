@@ -1,19 +1,21 @@
 #!/usr/bin/env python3
 
-import sys
-import os
-import networkx as nx
-import graphlib
-import matplotlib.pyplot as plt
-
-import json
 import argparse
+import graphlib
+import json
+import os
+import sys
 
+import matplotlib.pyplot as plt
+import networkx as nx
 
 if sys.version_info < (3, 10):
     sys.exit("Python 3.10 or higher is required to run this script")
 
-ROOT = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../"))
+ROOT = os.path.abspath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                 "../../")
+)
 data_dir = os.path.join(ROOT, "backend/data")
 results_dir = os.path.join(ROOT, "backend/results")
 
@@ -25,13 +27,24 @@ def parse_args() -> argparse.Namespace:
     (venv) /.../learn_anything/ ./backend/src/graph_creation.py
     """
     parser = argparse.ArgumentParser(description="Create a graph from a json file")
-    parser.add_argument("--data_dir", type=str, default=data_dir, help="The fullpath to the data directory")
-    parser.add_argument("--json_file", type=str, default="AI Research.json", help="The json file name in the data directory")
-    args = parser.parse_args()
-    return args
+    parser.add_argument(
+        "--data_dir",
+        type=str,
+        default=data_dir,
+        help="The fullpath to the data directory"
+    )
+    parser.add_argument(
+        "--json_file",
+        type=str,
+        default="AI Research.json",
+        help="The json file name in the data directory"
+    )
+    arguments = parser.parse_args()
+    return arguments
 
 
 class Node:
+
     def __init__(self) -> None:
         self.name: str = ""
         self.root: bool = False
@@ -39,10 +52,10 @@ class Node:
         self.desc: str = ""
         self.parents: list = []
         self.children: list = []
-        self.complete: bool = False # checkbox in gui
+        self.complete: bool = False  # checkbox in gui
         self.links: list = []
         self.weight: float = 0.0
-        self.depth: int = 0 # root = 0
+        self.depth: int = 0  # root = 0
 
     def add_child(self, node) -> None:
         self.children.append(node)
@@ -71,6 +84,7 @@ class Node:
 
 
 class Link:
+
     def __init__(self) -> None:
         self.name: str = ""
         self.url: str = ""
@@ -103,17 +117,22 @@ def create_graph(data: dict) -> nx.DiGraph:
     graph = nx.DiGraph()
 
     def process_node(node_data: dict, depth: int = 0) -> None:
-        name = node_data.get('name', '')
-        desc = node_data.get('desc', '')
+        name = node_data.get("name", "")
+        desc = node_data.get("desc", "")
 
         # Add node with its attributes
         graph.add_node(name, description=desc, depth=depth)
 
         # Process children
-        children = node_data.get('children', [])
+        children = node_data.get("children", [])
         for child in children:
-            child_name = child.get('name', '')
-            graph.add_node(child_name, description=child.get('desc', ''), depth=depth + 1)
+            child_name = child.get("name", "")
+            graph.add_node(
+                child_name,
+                description=child.get("desc",
+                                      ""),
+                depth=depth + 1
+            )
             graph.add_edge(name, child_name)
             process_node(child, depth + 1)
 
@@ -127,15 +146,15 @@ def display_graph(g: nx.DiGraph) -> None:
     display graph with labels for each node, arranged by depth levels
     """
     plt.figure(figsize=(24, 16))  # Increased figure size
-    
+
     # Group nodes by depth
     depth_groups = {}
     for node in g.nodes():
-        depth = g.nodes[node]['depth']
+        depth = g.nodes[node]["depth"]
         if depth not in depth_groups:
             depth_groups[depth] = []
         depth_groups[depth].append(node)
-    
+
     pos = {}
     max_depth = max(depth_groups.keys())
     max_nodes_at_any_depth = max(len(nodes) for nodes in depth_groups.values())
@@ -153,13 +172,13 @@ def display_graph(g: nx.DiGraph) -> None:
             # Distribute nodes evenly across the width
             x = ((i + 1) * width / (len(nodes) + 1)) - (width / 2)
             pos[node] = (x, y)
-    
+
     # Draw the graph
     # Draw edges first
     nx.draw_networkx_edges(
         g,
         pos=pos,
-        edge_color='lightgray',
+        edge_color="lightgray",
         width=2,
         arrowsize=25,
         alpha=0.6
@@ -169,11 +188,11 @@ def display_graph(g: nx.DiGraph) -> None:
     nx.draw_networkx_nodes(
         g,
         pos=pos,
-        node_color='skyblue',
+        node_color="skyblue",
         node_size=6000,  # Increased node size
         alpha=0.9,
         linewidths=2,
-        edgecolors='white'
+        edgecolors="white",
     )
 
     # Draw labels with word wrapping
@@ -186,41 +205,47 @@ def display_graph(g: nx.DiGraph) -> None:
 
         for word in words:
             current_line.append(word)
-            if len(' '.join(current_line)) > 20:  # Adjust this value to control line length
-                lines.append(' '.join(current_line[:-1]))
+            if len(" ".join(current_line)
+                   ) > 20:  # Adjust this value to control line length
+                lines.append(" ".join(current_line[:-1]))
                 current_line = [word]
 
         if current_line:
-            lines.append(' '.join(current_line))
+            lines.append(" ".join(current_line))
 
-        labels[node] = '\n'.join(lines)
+        labels[node] = "\n".join(lines)
 
     nx.draw_networkx_labels(
         g,
         pos=pos,
         labels=labels,
         font_size=10,
-        font_weight='bold',
-        font_family='sans-serif'
+        font_weight="bold",
+        font_family="sans-serif"
     )
 
     # Add depth level labels
     for depth in depth_groups:
         plt.text(
-            -width_scale/2,  # Adjusted x position based on width scale
+            -width_scale / 2,  # Adjusted x position based on width scale
             1 - (depth / (max_depth + 0.5)),  # Match the adjusted y-coordinate
-            f'Level {depth}',
-            horizontalalignment='right',
-            verticalalignment='center',
+            f"Level {depth}",
+            horizontalalignment="right",
+            verticalalignment="center",
             fontsize=12,
-            fontweight='bold'
+            fontweight="bold",
         )
 
-    plt.title("Knowledge Graph (arranged by depth)", pad=20, fontsize=14, fontweight='bold')
+    plt.title(
+        "Knowledge Graph (arranged by depth)",
+        pad=20,
+        fontsize=14,
+        fontweight="bold"
+    )
     plt.margins(x=0.2, y=0.2)  # Increased margins
 
     # Remove axes
-    plt.axis('off')
+    plt.axis("off")
 
     plt.tight_layout()  # Adjust layout to use full figure size
     plt.show()
@@ -264,8 +289,7 @@ if __name__ == "__main__":
     for fullpath in [ROOT, data_dir, json_file]:
         if not os.path.exists(fullpath):
             raise ValueError(f"File {fullpath} does not exist")
-        else:
-            print(f"Path {fullpath} found")
+        print(f"Path {fullpath} found")
 
     # scrape json file to build graph
     json_dict = read_json_file(json_file)
