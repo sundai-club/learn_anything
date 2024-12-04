@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +8,18 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Quiz {
+  id              String   @id @default(uuid())
+  name            String   @default("Untitled Quiz")
+  text            String
+  questions       String
+  totalQuestions  Int
+  correctAnswers  Int
+  skippedQuestions Int
+  timeSpent       Int
+  createdAt       DateTime @default(now())
+  timesCompleted  Int      @default(0)
+  totalScore      Int      @default(0)
 }
