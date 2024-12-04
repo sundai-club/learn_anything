@@ -6,7 +6,10 @@ interface Progress {
 }
 
 export interface ProgressMap {
-  [nodeId: string]: Progress;
+  [key: string]: {
+    completed: boolean;
+    timestamp: number;
+  };
 }
 
 export interface Topic {
@@ -14,7 +17,7 @@ export interface Topic {
   name: string;
   description?: string;
   details?: string[];
-  progress?: Progress;
+  topics?: Topic[];
 }
 
 export interface Domain {
@@ -89,10 +92,10 @@ export interface GraphNode {
   fixed?: boolean;
   x?: number;
   y?: number;
-  symbolSize: number | [number, number];
-  symbol?: string;
-  itemStyle?: GraphNodeItemStyle;
-  label?: GraphNodeLabel;
+  symbolSize: [number, number];
+  symbol: string;
+  itemStyle?: any;
+  label?: any;
   category?: string;
   details?: string[];
 }
@@ -101,16 +104,20 @@ export interface GraphEdge {
   id?: string;
   source: string;
   target: string;
-  lineStyle?: {
-    curveness?: number;
-    color?: string;
-    width?: number;
-    opacity?: number;
-    type?: string | number[];
-  };
+  lineStyle?: any;
 }
 
 export interface GraphData {
   nodes: GraphNode[];
   edges: GraphEdge[];
+}
+
+export interface EChartsOption {
+  series: {
+    type: string;
+    data: GraphNode[];
+    edges: GraphEdge[];
+    [key: string]: any;
+  }[];
+  [key: string]: any;
 }
