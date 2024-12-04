@@ -1,25 +1,27 @@
 name: Python Code Quality Checks
 
 on:
+  # Run on all pushes
   push:
-    paths:
-      - 'backend/**'
-      - '.github/workflows/**'
-      - 'requirements.txt'
-      - 'pyproject.toml'
-      - '.style.yapf'
+
+  # Run on all PRs
   pull_request:
-    branches: [ main ]
-    paths:
-      - 'backend/**'
-      - '.github/workflows/**'
-      - 'requirements.txt'
-      - 'pyproject.toml'
-      - '.style.yapf'
+    types: [opened, synchronize, reopened]
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+# Concurrency group based on PR number or branch name
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   code-quality:
+    name: Code Quality Check
     strategy:
+      # Prevent all matrix jobs from failing if one fails
+      fail-fast: false
       matrix:
         python-version: ["3.10"] #"3.11", "3.12"
         os: [ubuntu-latest, macos-latest]
