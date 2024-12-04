@@ -1,0 +1,81 @@
+name: Python Code Quality Checks
+
+on:
+  push:
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+      - '.style.yapf'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/**'
+      - 'requirements.txt'
+      - 'pyproject.toml'
+      - '.style.yapf'
+
+jobs:
+  code-quality:
+    strategy:
+      matrix:
+        python-version: ["3.10"] #"3.11", "3.12"
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install -r requirements.txt
+
+    - name: Run YAPF check
+      continue-on-error: true
+      run: |
+        echo "Running YAPF format check..."
+        yapf --diff --recursive backend || echo "YAPF check failed - run ./backend/scripts/format_python.sh to fix"
+
+    - name: Run isort check
+      continue-on-error: true
+      run: |
+        echo "Running isort check..."
+        isort --check-only backend || echo "isort check failed - run ./backend/scripts/format_python.sh to fix"
+
+    - name: Run Flake8
+      continue-on-error: true
+      run: |
+        echo "Running Flake8..."
+        flake8 backend || echo "Flake8 check failed - please fix style issues"
+
+    - name: Run MyPy type check
+      continue-on-error: true
+      run: |
+        echo "Running MyPy type check..."
+        mypy backend || echo "MyPy check failed - please fix type issues"
+
+    - name: Check Code Quality Score
+      run: |
+        echo "Running Pylint check..."
+        # Run pylint and capture both output and exit code
+        OUTPUT=$(pylint backend 2>&1) || true
+        echo "$OUTPUT"
+
+        # Extract score using grep and awk
+        SCORE=$(echo "$OUTPUT" | grep "Your code has been rated at" | awk '{print $7}' | cut -d'/' -f1)
+
+        # Check if score is less than 8.0 using Python
+        if python3 -c "exit(0 if float('${SCORE:-0}') >= 8.0 else 1)"; then
+          echo "Pylint score $SCORE meets minimum requirement of 8.0"
+        else
+          echo "Pylint score $SCORE is below minimum requirement of 8.0"
+          exit 1
+        fi

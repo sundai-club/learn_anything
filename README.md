@@ -1,15 +1,16 @@
 # learn_anything
 
-This codebase is designed to help a user learn about a topic by first learning the necessary foundational knowledge. 
+This codebase is designed to help a user learn about a topic by first learning the necessary foundational knowledge.
 
-## Setup Instructions for Python
+## Backend
+### Setup Instructions for Python
 
-### Prerequisites
+#### Prerequisites
 - Python 3.10 or higher
 - pip (Python package installer)
 - OpenAI api key
 
-### Installation
+#### Installation
 
 1. Clone the repository:
 ```bash
@@ -46,3 +47,74 @@ source venv/bin/activate
 ```bash
 (venv) ./backend/src/graph_creation.py [--optional-arguments]
 ```
+
+### Code Quality and Development
+
+#### Development Scripts
+
+The project includes several helpful scripts in `backend/scripts/`:
+
+```bash
+# Setup development environment
+./backend/scripts/setup.sh
+
+# Format Python files
+./backend/scripts/format_python.sh
+
+# Run all code quality checks
+./backend/scripts/lint.sh
+```
+
+#### Code Style and Quality Checks
+
+The project uses several tools to maintain code quality:
+- YAPF: Code formatting with custom style rules
+- isort: Import sorting
+- Flake8: Style guide enforcement
+- MyPy: Static type checking
+- Pylint: Code quality metrics (minimum score: 8.0)
+
+All these checks can be run using the lint script:
+```bash
+./backend/scripts/lint.sh
+```
+
+Or run individual checks:
+```bash
+# Format code with YAPF
+yapf -i -r backend
+
+# Sort imports
+isort backend
+
+# Run style checks
+flake8 backend
+
+# Run type checks
+mypy backend
+
+# Check code quality score
+pylint backend
+```
+
+#### GitHub Actions Workflow
+
+The repository includes a GitHub Actions workflow that runs on Ubuntu and macOS. The workflow:
+- Creates a Python virtual environment
+- Installs all dependencies
+- Runs all code quality checks with detailed output
+- Only fails if critical checks fail (e.g., pylint score < 8.0)
+- Provides helpful messages about fixing issues
+
+The workflow runs on:
+- Push to `active` branch
+- Pull requests to `main` branch
+
+To test GitHub Actions locally, you can use [act](https://github.com/nektos/act):
+
+```bash
+# Install act (on macOS)
+brew install act
+
+# Run the workflow locally
+act -j code-quality
