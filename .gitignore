@@ -69,7 +69,17 @@ instance/
 .scrapy
 
 # Sphinx documentation
+!docs/
+!docs/html/
+!docs/html/**
 docs/_build/
+
+# Doxygen output
+docs/html/
+docs/xml/
+docs/latex/
+# But keep the docs directory itself
+!docs/.gitkeep
 
 # PyBuilder
 .pybuilder/
@@ -161,6 +171,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-
+# Documentation
+docs/html/
+docs/xml/
+docs/latex/
 *.DS_Store
-
