@@ -1,0 +1,76 @@
+# Project settings
+PROJECT_NAME           = "Learn Anything"
+PROJECT_BRIEF          = "Interactive Wikipedia Knowledge Graph Generator"
+OUTPUT_DIRECTORY       = docs
+RECURSIVE             = YES
+GENERATE_HTML         = YES
+GENERATE_LATEX        = NO
+
+# Input settings
+INPUT                = backend/src \
+                      frontend/src
+FILE_PATTERNS        = *.py *.js *.jsx *.ts *.tsx
+RECURSIVE           = YES
+
+# Language settings
+OPTIMIZE_OUTPUT_JAVA = NO
+OPTIMIZE_OUTPUT_FOR_C = NO
+EXTENSION_MAPPING    = js=JavaScript \
+                      jsx=JavaScript \
+                      ts=JavaScript \
+                      tsx=JavaScript
+
+# Extraction settings
+EXTRACT_ALL          = YES
+EXTRACT_PRIVATE      = YES
+EXTRACT_STATIC       = YES
+EXTRACT_CLASSES      = YES
+EXTRACT_LOCAL_CLASSES = YES
+EXTRACT_LOCAL_METHODS = YES
+EXTRACT_ANON_NSPACES = YES
+HIDE_SCOPE_NAMES     = NO
+SHOW_INCLUDE_FILES   = YES
+INLINE_INFO          = YES
+
+# Filter settings
+FILTER_PATTERNS      = *.js=tools/jsdoc2doxygen.py \
+                      *.jsx=tools/jsdoc2doxygen.py \
+                      *.ts=tools/jsdoc2doxygen.py \
+                      *.tsx=tools/jsdoc2doxygen.py
+FILTER_SOURCE_FILES  = YES
+
+# JavaScript/TypeScript specific
+JAVADOC_AUTOBRIEF    = YES
+MARKDOWN_SUPPORT     = YES
+AUTOLINK_SUPPORT     = YES
+HTML_DYNAMIC_SECTIONS = YES
+TYPEDEF_HIDES_STRUCT = YES
+GENERATE_TREEVIEW    = YES
+FULL_PATH_NAMES      = YES
+SOURCE_BROWSER       = YES
+
+# Graph settings
+HAVE_DOT             = YES
+DOT_IMAGE_FORMAT     = svg
+CLASS_DIAGRAMS       = YES
+COLLABORATION_GRAPH  = YES
+GROUP_GRAPHS         = YES
+INCLUDE_GRAPH        = YES
+INCLUDED_BY_GRAPH    = YES
+CALL_GRAPH          = YES
+CALLER_GRAPH        = YES
+GRAPHICAL_HIERARCHY = YES
+DIRECTORY_GRAPH     = YES
+DOT_TRANSPARENT     = YES
+INTERACTIVE_SVG     = YES
+
+# Output settings
+HTML_OUTPUT         = html
+SEARCHENGINE        = YES
+GENERATE_TAGFILE    = YES
+TOC_INCLUDE_HEADINGS = 5
+ENUM_VALUES_PER_LINE = 1
+SORT_BRIEF_DOCS     = YES
+SORT_MEMBER_DOCS    = YES
+SORT_GROUP_NAMES    = YES
+LOOKUP_CACHE_SIZE   = 3

@@ -107,8 +107,8 @@ The repository includes a GitHub Actions workflow that runs on Ubuntu and macOS.
 - Provides helpful messages about fixing issues
 
 The workflow runs on:
-- Push to `active` branch
-- Pull requests to `main` branch
+- Pull requests to main branch
+- Pushes to main branch
 
 To test GitHub Actions locally, you can use [act](https://github.com/nektos/act):
 
@@ -118,3 +118,26 @@ brew install act
 
 # Run the workflow locally
 act -j code-quality
+
+
+```
+
+## Documentation
+
+### Doxygen Documentation
+
+Documentation is automatically generated using Doxygen for both Python and JavaScript/TypeScript code.
+
+#### Viewing Documentation
+1. Generate documentation locally:
+   ```bash
+   doxygen Doxyfile
+   ```
+
+2. Open in your browser:
+   ```bash
+   # On macOS
+   open docs/html/index.html
+   # On Linux
+   xdg-open docs/html/index.html
+   ```
